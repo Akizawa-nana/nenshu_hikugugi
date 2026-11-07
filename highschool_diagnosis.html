@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>秋田県高校適性判定（特別編）</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:#111;font-family:"MS PGothic","ＭＳ Ｐゴシック",Arial,sans-serif;font-size:16px}
+header{padding:8px 12px;background:#eee;border-bottom:2px solid #999;display:flex;justify-content:space-between;align-items:center;font-size:18px;font-weight:bold}
+header .brand{color:#000080;font-family:Georgia,serif}
+main{max-width:760px;margin:16px auto;padding:12px;background:#fff}
+h1{font-size:30px;line-height:1.35;margin:8px 0 16px;color:#000}
+.mark{background:#ffff99;padding:0 2px}
+.intro{font-size:16px;line-height:1.8;margin-bottom:18px}
+.panel{border:1px solid #999;background:#f8f8f8;padding:16px;margin:16px 0}
+.center{text-align:center}.hidden{display:none}
+.result-tag{display:inline-block;background:#ffff99;border:1px solid #999;padding:3px 8px;font-weight:bold;color:#900}
+.result-title{font-size:26px;font-weight:bold;line-height:1.3;margin:12px 0}
+.result-desc{font-size:15px;line-height:1.7;margin-bottom:16px}
+
+/* 受験校レベルごとのカードデザイン */
+.rank-box{border:1px solid #ccc;background:#fff;padding:12px;margin:12px 0;border-left:6px solid #999}
+.rank-box.challenge{border-left-color:#cc3300;background:#fff5f5}
+.rank-box.target{border-left-color:#000080;background:#f0f4ff}
+.rank-box.safety{border-left-color:#008800;background:#f2fff2}
+
+.rank-title{font-weight:bold;font-size:16px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.rank-badge{font-size:12px;padding:2px 8px;color:#fff;border-radius:3px}
+.badge-challenge{background:#cc3300}
+.badge-target{background:#000080}
+.badge-safety{background:#008800}
+
+.school-names{font-weight:bold;font-size:18px;line-height:1.6;color:#111}
+
+ul{line-height:1.8}
+footer{color:#666;font-size:12px;text-align:center;margin-top:24px;border-top:1px dotted #aaa;padding-top:10px}
+input[type="number"]{font-size:20px;padding:6px 10px;width:140px;text-align:right;margin-right:8px}
+.area-buttons{display:flex;gap:10px;justify-content:center;margin:16px 0}
+.area-btn{flex:1;max-width:160px;padding:12px;font:inherit;font-weight:bold;font-size:16px;cursor:pointer;background:#eee;border:2px outset #ddd;color:#000080}
+.area-btn:hover{background:#ffffcc}
+button.primary{border:2px outset #ddd;background:#eee;color:#000080;border-radius:0;padding:8px 20px;font:inherit;font-weight:bold;font-size:16px;cursor:pointer}
+button.primary:active{border-style:inset}
+</style>
+</head>
+<body>
+<header><span>■ 全国版</span><span class="brand">@school-check.</span></header>
+<main>
+<!-- ステップ1：地域選択 -->
+<section id="stepArea">
+<h1>行きたいエリアはどこ？<br><span class="mark">高校適性診断</span></h1>
+<p class="intro">まずは気になるエリアを選んでね。</p>
+<div class="panel">
+<p style="font-size:18px;line-height:1.8;margin-top:0;font-weight:bold" class="center">地域を選択してください：</p>
+<div class="area-buttons">
+<button class="area-btn" onclick="selectArea('hokubu')">県北</button>
+<button class="area-btn" onclick="selectArea('kenou')">県央</button>
+<button class="area-btn" onclick="selectArea('kennan')">県南</button>
+</div>
+<p style="margin-bottom:0;margin-top:16px" class="center"><small style="color:#666">※お遊び・ジョーク診断です</small></p>
+</div>
+</section>
+
+<!-- ステップ2：点数入力 -->
+<section id="stepScore" class="hidden">
+<h1 id="areaTitle"></h1>
+<p class="intro">直近の実力テスト（500点満点）の合計点数を入力してください。</p>
+<div class="panel">
+<div class="center" style="margin:20px 0">
+<input type="number" id="scoreInput" min="0" max="500" placeholder="0〜500"> 点 / 500点
+</div>
+<div class="center"><button class="primary" id="begin">判定してみる</button></div>
+<p class="center" style="margin-top:12px"><a href="#" onclick="resetToArea(); return false;" style="font-size:14px">← 地域を選び直す</a></p>
+</div>
+</section>
+
+<!-- ステップ3：結果表示 -->
+<section id="result" class="hidden">
+<span class="result-tag" id="resultTag"></span>
+<div class="result-title" id="resultTitle"></div>
+<p class="result-desc" id="resultDesc"></p>
+
+<!-- 挑戦校 -->
+<div class="rank-box challenge">
+<div class="rank-title">
+<span>挑戦校（目標レベル）</span>
+<span class="rank-badge badge-challenge">合格率 40〜60%</span>
+</div>
+<div class="school-names" id="challengeSchools"></div>
+</div>
+
+<!-- 相応校 -->
+<div class="rank-box target">
+<div class="rank-title">
+<span>相応校（実力ぴったり）</span>
+<span class="rank-badge badge-target">合格率 60〜80%</span>
+</div>
+<div class="school-names" id="targetSchools"></div>
+</div>
+
+<!-- 安全校 -->
+<div class="rank-box safety">
+<div class="rank-title">
+<span>安全校（確実圏レベル）</span>
+<span class="rank-badge badge-safety">合格率 80%以上</span>
+</div>
+<div class="school-names" id="safetySchools"></div>
+</div>
+
+<div class="panel">
+<h3>これからの学習ワンポイント</h3>
+<ul id="tips"></ul>
+</div>
+
+<div class="center"><button class="primary" id="again">もう一度診断する</button></div>
+</section>
+
+<footer>高校診断テスト</footer>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+let selectedArea = "";
+let areaNameText = "";
+
+function selectArea(area) {
+    selectedArea = area;
+    if(area === 'hokubu') areaNameText = "【県北エリア】";
+    if(area === 'kenou') areaNameText = "【県央エリア】";
+    if(area === 'kennan') areaNameText = "【県南エリア】";
+
+    $("areaTitle").textContent = `${areaNameText} の実力テスト判定`;
+    $("stepArea").classList.add("hidden");
+    $("stepScore").classList.remove("hidden");
+}
+
+function resetToArea() {
+    $("stepScore").classList.add("hidden");
+    $("stepArea").classList.remove("hidden");
+    $("scoreInput").value = "";
+}
+
+$("begin").onclick = () => {
+    const rawValue = $("scoreInput").value;
+    const score = parseInt(rawValue, 10);
+
+    if (isNaN(score) || score < 0 || score > 500) {
+        alert("0点から500点の間で入力してね！");
+        return;
+    }
+
+    showResult(score, selectedArea);
+};
+
+function showResult(score, area) {
+    let challenge = [];
+    let target = [];
+    let safety = [];
+    let desc = "";
+    let tips = [];
+
+    const formatSchools = list => list.length ? list.map(s => `・${s}`).join("<br>") : "該当なし";
+
+    // 0〜50点の場合の特別処理（一周回って秋田高校をおすすめ！）
+    if (score <= 50) {
+        challenge = ["秋田高校"];
+        target = ["秋田高校"];
+        safety = ["秋田高校"];
+        desc = "バカとブスほど秋高へ行けみたいな";
+        tips = [
+            "全ての教科を1から…いや、0から宇宙の真理のように学び直そう",
+            "奇跡の逆転劇を起こすために、明日から伝説の主人公になろう"
+	];
+    } else {
+        // 通常の判定ロジック
+        if (area === 'hokubu') {
+            if (score >= 430) {
+                challenge = ["秋田高校"];
+                target = ["大館鳳鳴高校"];
+                safety = ["能代高校", "大館桂桜高校"];
+                desc = "圧倒的な学力だよ！最難関の学科まで十分狙える位置にいるね。";
+            } else if (score >= 360) {
+                challenge = ["大館鳳鳴高校"];
+                target = ["能代高校", "大館桂桜高校"];
+                safety = ["能代科学技術高校", "鹿角高校", "北鷹高校"];
+                desc = "上位校を狙える好位置！過去問対策でさらに確実にしていこう。";
+            } else if (score >= 280) {
+                challenge = ["能代高校", "大館桂桜高校"];
+                target = ["能代科学技術高校", "鹿角高校", "北鷹高校"];
+                safety = ["県北各地の総合学科・各校"];
+                desc = "基礎力が安定しているね！専門スキルや実習系も相性がよさそう。";
+            } else {
+                challenge = ["能代科学技術高校", "大館桂桜高校"];
+                target = ["鹿角高校", "北鷹高校"];
+                safety = ["地域総合学科・通信制高校"];
+                desc = "基本問題をしっかり固めれば、どんどん上の学校も狙えるようになるよ！";
+            }
+        } else if (area === 'kenou') {
+            if (score >= 440) {
+                challenge = ["秋田高校"];
+                target = ["秋田高校", "秋田南高校"];
+                safety = ["秋田北高校", "秋田中央高校"];
+                desc = "トップレベルの学力だよ！難関大学を見据えた志望校選びができるね。";
+            } else if (score >= 380) {
+                challenge = ["秋田高校"];
+                target = ["秋田南高校", "秋田北高校"];
+                safety = ["秋田中央高校", "秋田工業高校", "秋田商業高校"];
+                desc = "非常に高い実力を持っているよ！上位校の合格圏内に入っているね。";
+            } else if (score >= 310) {
+                challenge = ["秋田北高校", "秋田中央高校"];
+                target = ["秋田工業高校", "秋田商業高校", "新屋高校", "秋田西高校"];
+                safety = ["男鹿海洋高校", "五城目高校", "地域総合学科"];
+                desc = "中堅〜人気校を幅広く狙える位置にいるよ。自分の得意分野に合わせて選ぼう！";
+            } else if (score >= 230) {
+                challenge = ["新屋高校", "秋田西高校", "秋田商業高校"];
+                target = ["金足農業高校", "男鹿海洋高校", "五城目高校"];
+                safety = ["各地域普通科・定時制・通信制"];
+                desc = "ここからの暗記・基礎固めで、さらに1ランク上を目指すことも十分可能だよ！";
+            } else {
+                challenge = ["金足農業高校", "秋田西高校"];
+                target = ["五城目高校", "各地域総合学科"];
+                safety = ["通信制・単位制高校"];
+                desc = "苦手な教科の克服から始めて、少しずつ点数を上げていこう！";
+            }
+        } else if (area === 'kennan') {
+            if (score >= 420) {
+                challenge = ["秋田高校"];
+                target = ["横手高校", "本荘高校"];
+                safety = ["大曲高校", "湯沢高校"];
+                desc = "県南トップクラスの実力！横手高校がしっかり射程に入っているよ。";
+            } else if (score >= 350) {
+                challenge = ["横手高校", "本荘高校"];
+                target = ["大曲高校", "湯沢高校", "横手城南高校"];
+                safety = ["大曲工業高校", "由利工業高校", "大曲農業高校"];
+                desc = "上位進学校を目指すのに十分な力があるよ！ミスを減らして精度をあげよう。";
+            } else if (score >= 270) {
+                challenge = ["大曲高校", "湯沢高校"];
+                target = ["大曲工業高校", "由利工業高校", "大曲農業高校", "平成高校", "西目高校"];
+                safety = ["羽後高校", "増田高校", "各地域総合学科"];
+                desc = "実業系・専門学科でも普通科でも活躍できるバランスの良さがあるよ！";
+            } else {
+                challenge = ["大曲工業高校", "由利工業高校"];
+                target = ["羽後高校", "増田高校", "各地域総合学科"];
+                safety = ["定時制・通信制高校"];
+                desc = "1年生・2年生の総復習から取り組めば、まだまだ伸びていくよ！";
+            }
+        }
+
+        tips = [
+            "挑戦校を目指すなら、後半の発展問題や記述対策に力を入れよう",
+            "相応校を確実にするなら、計算ミスや漢字などのケアレスミスをなくそう",
+            "安全校も必ずオープンスクールなどで雰囲気を確かめておこう"
+        ];
+    }
+
+    $("stepScore").classList.add("hidden");
+    $("result").classList.remove("hidden");
+
+    $("resultTag").textContent = `CHECK! ${areaNameText} 3段階判定結果`;
+    $("resultTitle").textContent = `実力テスト ${score}点 の判定結果`;
+    $("resultDesc").textContent = desc;
+
+    $("challengeSchools").innerHTML = formatSchools(challenge);
+    $("targetSchools").innerHTML = formatSchools(target);
+    $("safetySchools").innerHTML = formatSchools(safety);
+    $("tips").innerHTML = tips.map(t => `<li>${t}</li>`).join("");
+}
+
+$("again").onclick = () => {
+    $("result").classList.add("hidden");
+    $("stepArea").classList.remove("hidden");
+    $("scoreInput").value = "";
+    selectedArea = "";
+};
+</script>
+</body>
+</html>

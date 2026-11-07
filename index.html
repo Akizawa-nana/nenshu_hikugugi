@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akita!News JAPAN</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Hiragino+Sans&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Helvetica Neue", "Noto Sans JP", sans-serif;
+            background-color: #f2f2f2;
+            color: #333333;
+        }
+        .yj-red { color: #ff0033; }
+        .yj-bg-red { background-color: #ff0033; }
+        .border-yj { border-color: #e5e5e5; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- 免責表示ヘッダー（誤解防止） -->
+    <div class="bg-red-600 text-white text-xs font-bold text-center py-1.5 px-4 sticky top-0 z-50 shadow-md flex items-center justify-center gap-2">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span>※このサイトに掲載されているニュースはすべて架空のフィクションです</span>
+    </div>
+
+    <!-- ポータルヘッダー -->
+    <header class="bg-white border-b border-gray-300">
+        <!-- ロゴ＆検索バーエリア -->
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <a href="#" class="text-2xl font-black tracking-tighter text-slate-900 flex items-center gap-1">
+                    <span class="bg-red-600 text-white text-lg font-black px-2 py-0.5 rounded">AKITA!</span>
+                    <span class="text-xl font-bold tracking-tight">ニュース</span>
+                </a>
+                <span class="text-[11px] text-gray-500 bg-gray-100 px-2 py-0.5 rounded border border-gray-200">秋田版</span>
+            </div>
+
+            <!-- 検索ボックス風 UI -->
+            <div class="flex-grow max-w-md">
+                <div class="flex border-2 border-red-600 rounded overflow-hidden">
+                    <input type="text" placeholder="キーワードを入力" class="w-full px-3 py-1.5 text-xs text-gray-800 focus:outline-none">
+                    <button class="bg-red-600 text-white px-4 text-xs font-bold hover:bg-red-700 transition">検索</button>
+                </div>
+            </div>
+
+            <!-- 右上サブメニュー -->
+            <div class="flex items-center gap-3 text-xs text-gray-600">
+                <span class="cursor-pointer hover:underline"><i class="fa-regular fa-user mr-1"></i>ログイン</span>
+                <span>|</span>
+                <span class="cursor-pointer hover:underline"><i class="fa-regular fa-bell mr-1"></i>通知</span>
+            </div>
+        </div>
+
+        <!-- カテゴリナビゲーション -->
+        <nav class="bg-[#222222] text-white text-xs font-bold">
+            <div class="max-w-6xl mx-auto flex overflow-x-auto">
+                <a href="#" onclick="switchTab(this)" class="px-4 py-2.5 bg-red-600 text-white whitespace-nowrap">主要</a>
+                <a href="#" onclick="switchTab(this)" class="px-4 py-2.5 hover:bg-gray-800 whitespace-nowrap">秋田県内</a>
+                <a href="#" onclick="switchTab(this)" class="px-4 py-2.5 hover:bg-gray-800 whitespace-nowrap">社会</a>
+                <a href="#" onclick="switchTab(this)" class="px-4 py-2.5 hover:bg-gray-800 whitespace-nowrap">経済</a>
+                <a href="#" onclick="switchTab(this)" class="px-4 py-2.5 hover:bg-gray-800 whitespace-nowrap">生活・教育</a>
+                <a href="#" onclick="switchTab(this)" class="px-4 py-2.5 hover:bg-gray-800 whitespace-nowrap">事件・事故</a>
+                <a href="#" onclick="switchTab(this)" class="px-4 py-2.5 hover:bg-gray-800 whitespace-nowrap">お天気</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <div class="max-w-6xl mx-auto px-4 py-5 w-full flex-grow grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- 左カラム：メインニュースエリア (8列) -->
+        <main class="lg:col-span-8 space-y-6">
+
+            <!-- トピックスメイン枠 -->
+            <div class="bg-white border border-gray-300 rounded p-4 shadow-sm">
+
+                <!-- 注目トピックス header -->
+                <div class="border-b border-gray-200 pb-2 mb-4 flex items-center justify-between">
+                    <h2 class="text-base font-bold text-gray-900 border-l-4 border-red-600 pl-2">
+                        秋田の主要トピックス
+                    </h2>
+                    <span class="text-xs text-gray-500">11/7(土) 16:45 更新</span>
+                </div>
+
+                <!-- トップメイン記事 -->
+                <div class="mb-5 border-b border-gray-200 pb-5 cursor-pointer hover:opacity-95 transition" onclick="openModal(0)">
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="md:w-5/12 bg-amber-50 rounded overflow-hidden border border-amber-200 flex flex-col items-center justify-center h-44 relative text-amber-700">
+                            <i class="fa-solid fa-train text-5xl mb-1"></i>
+                            <i class="fa-solid fa-wheat-awn text-2xl absolute top-3 right-3 text-amber-500"></i>
+                            <span class="text-xs font-bold">新米輸送専用「こまち」</span>
+                            <span class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-1.5 py-0.5 rounded">写真：秋田日報</span>
+                        </div>
+                        <div class="md:w-7/12 flex flex-col justify-between">
+                            <div>
+                                <span class="inline-block bg-red-100 text-red-700 text-[10px] font-bold px-1.5 py-0.5 rounded mb-1">経済・交通</span>
+                                <h3 class="text-lg font-bold text-gray-900 leading-snug hover:text-red-600 transition mb-2">
+                                    JR東日本、秋田新幹線に「新米穀輸送専用」の便を新設へ
+                                </h3>
+                                <p class="text-xs text-gray-600 line-clamp-3 leading-relaxed">
+                                    JR東日本秋田支社は、秋田県産新米の鮮度を極限まで保ったまま都心へ届けるため、秋田新幹線（E6系）の客席を全面撤去した「新米穀専用便」を限定運行すると発表した。専用の米俵型クッションが設置され…
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-3 text-xs text-gray-400 mt-3">
+                                <span>秋田日報ニュース</span>
+                                <span><i class="fa-regular fa-comment mr-1"></i>418</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- リストニュース -->
+                <ul class="space-y-3 text-sm">
+                    <li class="flex items-start justify-between border-b border-gray-100 pb-2 cursor-pointer hover:bg-gray-50 p-1 rounded" onclick="openModal(1)">
+                        <div class="flex items-start gap-2">
+                            <span class="text-red-600 font-bold text-xs shrink-0 mt-0.5">●</span>
+                            <span class="font-medium text-gray-800 hover:text-red-600 leading-snug">
+                                【教育】中学校の総合に「花火作り」 伝統文化への継承へ繋げる 大仙市
+                            </span>
+                        </div>
+                        <span class="text-xs text-gray-400 shrink-0 ml-2">15:30</span>
+                    </li>
+                    <li class="flex items-start justify-between border-b border-gray-100 pb-2 cursor-pointer hover:bg-gray-50 p-1 rounded" onclick="openModal(2)">
+                        <div class="flex items-start gap-2">
+                            <span class="text-red-600 font-bold text-xs shrink-0 mt-0.5">●</span>
+                            <span class="font-medium text-gray-800 hover:text-red-600 leading-snug">
+                                【インフラ】「秋田阿仁合道路」全線開通へ一歩近づく
+                            </span>
+                        </div>
+                        <span class="text-xs text-gray-400 shrink-0 ml-2">14:15</span>
+                    </li>
+                    <li class="flex items-start justify-between border-b border-gray-100 pb-2 cursor-pointer hover:bg-gray-50 p-1 rounded" onclick="openModal(3)">
+                        <div class="flex items-start gap-2">
+                            <span class="text-red-600 font-bold text-xs shrink-0 mt-0.5">●</span>
+                            <span class="font-medium text-gray-800 hover:text-red-600 leading-snug">
+                                【社会】県内の熊に「人里出没防止講習」を実施 生活圏分離へ
+                            </span>
+                        </div>
+                        <span class="text-xs text-gray-400 shrink-0 ml-2">12:00</span>
+                    </li>
+                    <li class="flex items-start justify-between border-b border-gray-100 pb-2 cursor-pointer hover:bg-gray-50 p-1 rounded" onclick="openModal(4)">
+                        <div class="flex items-start gap-2">
+                            <span class="text-red-600 font-bold text-xs shrink-0 mt-0.5">●</span>
+                            <span class="font-medium text-gray-800 hover:text-red-600 leading-snug">
+                                【事件】鹿角市のスーパーで新米約120キロ盗んだ男を逮捕 「今年の出来が気になった」
+                            </span>
+                        </div>
+                        <span class="text-xs text-gray-400 shrink-0 ml-2">10:45</span>
+                    </li>
+                </ul>
+
+                <div class="mt-4 text-right">
+                    <a href="#" class="text-xs text-blue-600 hover:underline font-bold">もっと見る <i class="fa-solid fa-angle-right"></i></a>
+                </div>
+            </div>
+
+            <!-- 写真ニュースピックアップ -->
+            <div class="bg-white border border-gray-300 rounded p-4 shadow-sm">
+                <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-3">地域フォトニュース</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="cursor-pointer group" onclick="openModal(1)">
+                        <div class="bg-slate-800 h-24 rounded flex flex-col items-center justify-center text-amber-400 mb-1.5 group-hover:opacity-80 transition">
+                            <i class="fa-solid fa-burst text-3xl"></i>
+                            <span class="text-[10px] text-gray-300 mt-1">実地テスト風景</span>
+                        </div>
+                        <p class="text-xs font-bold text-gray-800 line-clamp-2 group-hover:text-red-600">校庭での花火打ち上げ実験の様子</p>
+                    </div>
+                    <div class="cursor-pointer group" onclick="openModal(2)">
+                        <div class="bg-slate-200 h-24 rounded flex flex-col items-center justify-center text-slate-600 mb-1.5 group-hover:opacity-80 transition">
+                            <i class="fa-solid fa-road text-3xl"></i>
+                            <span class="text-[10px] text-gray-500 mt-1">保温壁トンネル</span>
+                        </div>
+                        <p class="text-xs font-bold text-gray-800 line-clamp-2 group-hover:text-red-600">マタギ技法を応用したトンネル保温壁</p>
+                    </div>
+                    <div class="cursor-pointer group" onclick="openModal(3)">
+                        <div class="bg-emerald-100 h-24 rounded flex flex-col items-center justify-center text-emerald-700 mb-1.5 group-hover:opacity-80 transition">
+                            <i class="fa-solid fa-paw text-3xl"></i>
+                            <span class="text-[10px] text-emerald-800 mt-1">山中講習会</span>
+                        </div>
+                        <p class="text-xs font-bold text-gray-800 line-clamp-2 group-hover:text-red-600">静かに受講するツキノワグマの群れ</p>
+                    </div>
+                    <div class="cursor-pointer group" onclick="openModal(4)">
+                        <div class="bg-amber-100 h-24 rounded flex flex-col items-center justify-center text-amber-700 mb-1.5 group-hover:opacity-80 transition">
+                            <i class="fa-solid fa-bowl-rice text-3xl"></i>
+                            <span class="text-[10px] text-amber-900 mt-1">押収された炊飯器</span>
+                        </div>
+                        <p class="text-xs font-bold text-gray-800 line-clamp-2 group-hover:text-red-600">現場に残されていた炊飯器と発電機</p>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- 右カラム：サイドバー (4列) -->
+        <aside class="lg:col-span-4 space-y-6">
+
+            <!-- 天気予報ウィジェット -->
+            <div class="bg-white border border-gray-300 rounded p-3.5 shadow-sm">
+                <div class="flex items-center justify-between border-b border-gray-200 pb-2 mb-3">
+                    <h3 class="text-xs font-bold text-gray-800"><i class="fa-solid fa-cloud-sun text-blue-500 mr-1"></i>秋田県内の天気</h3>
+                    <span class="text-[10px] text-gray-400">秋田市</span>
+                </div>
+                <div class="flex items-center justify-between text-center text-xs">
+                    <div>
+                        <p class="text-gray-500 text-[10px]">今日 11/7</p>
+                        <i class="fa-solid fa-cloud-showers-heavy text-slate-500 text-xl my-1"></i>
+                        <p class="font-bold">雨時々曇</p>
+                        <p class="text-[10px]"><span class="text-red-600">14℃</span> / <span class="text-blue-600">8℃</span></p>
+                    </div>
+                    <div class="border-l border-gray-200 pl-3">
+                        <p class="text-gray-500 text-[10px]">明日 11/8</p>
+                        <i class="fa-solid fa-cloud-sun text-amber-500 text-xl my-1"></i>
+                        <p class="font-bold">晴のち曇</p>
+                        <p class="text-[10px]"><span class="text-red-600">12℃</span> / <span class="text-blue-600">5℃</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- アクセスランキング -->
+            <div class="bg-white border border-gray-300 rounded p-4 shadow-sm">
+                <h3 class="text-xs font-bold text-gray-800 border-b border-gray-200 pb-2 mb-3 flex items-center justify-between">
+                    <span>アクセスランキング</span>
+                    <span class="text-[10px] text-gray-400 font-normal">県内ニュース</span>
+                </h3>
+                <ol class="space-y-3 text-xs">
+                    <li class="flex items-start gap-2 cursor-pointer group" onclick="openModal(0)">
+                        <span class="font-black text-red-600 text-sm italic w-4">1</span>
+                        <p class="font-medium text-gray-800 group-hover:text-red-600 leading-snug">
+                            秋田新幹線「新米穀専用便」運行へ
+                        </p>
+                    </li>
+                    <li class="flex items-start gap-2 cursor-pointer group" onclick="openModal(3)">
+                        <span class="font-black text-amber-600 text-sm italic w-4">2</span>
+                        <p class="font-medium text-gray-800 group-hover:text-red-600 leading-snug">
+                            県内の熊に「人里出没防止講習」 
+                        </p>
+                    </li>
+                    <li class="flex items-start gap-2 cursor-pointer group" onclick="openModal(4)">
+                        <span class="font-black text-amber-700 text-sm italic w-4">3</span>
+                        <p class="font-medium text-gray-800 group-hover:text-red-600 leading-snug">
+                            新米120kg盗みその場で炊飯「食味が気になった」男逮捕
+                        </p>
+                    </li>
+                    <li class="flex items-start gap-2 cursor-pointer group" onclick="openModal(1)">
+                        <span class="font-black text-gray-400 text-sm italic w-4">4</span>
+                        <p class="font-medium text-gray-800 group-hover:text-red-600 leading-snug">
+                            大仙市の中学校で授業に「花火作り」導入
+                        </p>
+                    </li>
+                    <li class="flex items-start gap-2 cursor-pointer group" onclick="openModal(2)">
+                        <span class="font-black text-gray-400 text-sm italic w-4">5</span>
+                        <p class="font-medium text-gray-800 group-hover:text-red-600 leading-snug">
+                            「秋田阿仁合道路」着工　全線開通へ一歩近づく
+                        </p>
+                    </li>
+                </ol>
+            </div>
+
+        </aside>
+    </div>
+
+    <!-- ニュース詳細モーダル（Yahoo!ニュース記事詳細風） -->
+    <div id="newsModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-3 hidden overflow-y-auto">
+        <div class="bg-white w-full max-w-3xl rounded-sm shadow-xl max-h-[90vh] flex flex-col my-auto border border-gray-400">
+            <!-- モーダルヘッダー -->
+            <div class="bg-gray-100 px-4 py-2 border-b border-gray-300 flex items-center justify-between">
+                <span class="text-xs font-bold text-gray-600" id="modalCategory">社会</span>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-black font-bold text-lg px-2">✕</button>
+            </div>
+
+            <!-- 記事ボディ -->
+            <div class="p-5 overflow-y-auto space-y-4 text-gray-800">
+                <h1 id="modalTitle" class="text-xl md:text-2xl font-bold leading-tight border-b border-gray-200 pb-3">
+                    記事タイトル
+                </h1>
+
+                <div class="flex items-center justify-between text-xs text-gray-500">
+                    <span id="modalSource">秋田日報ニュース</span>
+                    <span id="modalTime">11/7(土) 16:00配信</span>
+                </div>
+
+                <div id="modalBody" class="text-sm leading-relaxed space-y-3 text-gray-800">
+                    <!-- JavaScriptで動的生成 -->
+                </div>
+
+                <!-- 記事内 ジョーク注意テロップ -->
+                <div class="mt-6 p-3 bg-red-50 border border-red-200 rounded text-xs text-red-800 font-bold text-center">
+                    ※この記事は架空のニュースです
+                </div>
+
+                <!-- コメント欄 -->
+                <div class="mt-8 border-t border-gray-300 pt-5">
+                    <h3 class="text-sm font-bold text-gray-900 mb-3 flex items-center justify-between">
+                        <span>コメント（<span id="modalCommentCount">0</span>件）</span>
+                        <span class="text-xs font-normal text-gray-500">※ヤフコメ風コメント欄</span>
+                    </h3>
+
+                    <!-- コメント入力エリア -->
+                    <div class="mb-4">
+                        <textarea id="commentInput" placeholder="コメントを入力（※ブラウザ内のみ保存されます）" class="w-full border border-gray-300 rounded p-2 text-xs focus:outline-none focus:border-red-600 h-16"></textarea>
+                        <div class="text-right mt-1">
+                            <button onclick="addComment()" class="bg-red-600 text-white text-xs px-3 py-1.5 rounded font-bold hover:bg-red-700 transition">コメント投稿</button>
+                        </div>
+                    </div>
+
+                    <!-- コメント一覧 -->
+                    <div id="modalComments" class="space-y-3">
+                        <!-- 動的生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="bg-gray-100 border-t border-gray-300 text-gray-600 text-xs py-8 mt-auto">
+        <div class="max-w-6xl mx-auto px-4 text-center space-y-3">
+            <p class="font-bold text-gray-700">AKITA! ニュース (パロディポータル)</p>
+            <p class="text-[11px] text-gray-500 max-w-2xl mx-auto">
+                当ウェブサイトに掲載されているニュース記事、画像、コメントはすべて架空のジョーク記事です。実在の人物・団体・事件・施設とは一切関係がありません
+            </p>
+            <p class="text-[10px] text-gray-400">&copy; Akita Fake Portal News Project. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- 右下固定の広告バナー -->
+    <div id="adBanner" class="fixed bottom-3 right-3 z-40 w-48 sm:w-80 bg-white border border-gray-300 rounded shadow-lg overflow-hidden">
+        <div class="flex items-center justify-between px-2 py-0.5 bg-gray-100 border-b border-gray-200 text-[10px] text-gray-500">
+            <span>広告</span>
+            <button onclick="closeAd()" aria-label="広告を閉じる" class="hover:text-black font-bold px-1">✕</button>
+        </div>
+        <!-- ↓ リンク先URLは href="#" の部分を書き換えてください -->
+        <a href="#" target="_blank" rel="noopener sponsored">
+            <img src="https://static.wixstatic.com/media/2b941f_2b2e61f2d853494bbcc36daca6d92544~mv2.png" alt="広告" class="w-full h-auto block">
+        </a>
+    </div>
+
+    <!-- スクリプト -->
+    <script>
+        // ニュースデータ
+        const articles = [
+            {
+                category: "経済・交通",
+                title: "JR東日本、秋田新幹線に「新米穀輸送専用」の便を新設へ",
+                source: "秋田日報ニュース",
+                time: "11/7(土) 16:00配信",
+                commentCount: 418,
+                body: [
+                    "JR東日本秋田支社は7日、収穫期を迎えた秋田県産新米の鮮度を極限まで保ったまま首都圏へ輸送するため、秋田新幹線（E6系）の座席を全面撤去した「新米穀輸送専用便」を限定運行すると発表した。",
+                    "同便では、客室内に衝撃を吸収する「特製・米俵型クッション」が敷き詰められ、新米の袋が隙間なく積み込まれる。また、車内湿度と温度は米の保管に最適な15度・湿度70%に厳格制御される。さらに、乗務員やアテンダントは通常の制服ではなく「特製・地元農協の半纏（はんてん）」を着用して搭乗するという。",
+                    "担当者は「とれたての新米を最速かつ最高の状態で東京の料亭や家庭に届けたい。新幹線の最高速度320km/hを生かした究極の産地直送サービスだ」と胸を張る。一方、有識者からは「米の鮮度を保持して輸送できるのか」という懸念も上がっている。"
+                ],
+                comments: [
+                    { user: "akita_komachi****", text: "一瞬『さすが米どころ秋田！』と感心しかけたが、乗務員が農協の半纏着用で『嘘だな』と察したわ笑。でも実現したら胸熱。", votes: 520 },
+                    { user: "e6_supersonic", text: "座席全部撤去して米俵クッション敷き詰めるのは輸送効率悪すぎて草。最高速度で米が寄らないか心配。", votes: 310 },
+                    { user: "tokyo_gourmet", text: "東京で超とれたてが食べられるなら応援したいけど、よく読んだらフィクションかい", votes: 142 }
+                ]
+            },
+            {
+                category: "教育・生活",
+                title: "中学校の総合に「花火作り」 伝統文化への継承へ繋げる 大仙市",
+                source: "大曲タイムス",
+                time: "11/7(土) 15:30配信",
+                commentCount: 205,
+                body: [
+                    "全国花火競技大会（大曲の花火）で知られる大仙市は、市内の中学校において「総合的な学習の時間」を活用した「伝統花火制作ワークショップ」を導入すると発表した。",
+                    "同プログラムでは、地元の花火職人を講師に招き、生徒たちが自ら薬品の調合や割薬の装填作業を行い、オリジナルの打ち上げ花火（3号玉）を1人1発制作する。学期末には校庭での実地打ち上げテストおよび鑑賞会を検討しているという。",
+                    "教育委員会は「幼少期から伝統技術に直接触れさせることで、将来の煙火師育成と地域愛の醸成につなげたい」としている。これに対し保護者からは「安全面での消防との連携はどうなっているのか」「校庭で同時に何十発も打ち上げたら近所迷惑では」など、現実的な心配の声も上がっている。"
+                ],
+                comments: [
+                    { user: "omagari_hanabi_fan", text: "大仙市なら本当にやりかねない絶妙なライン攻めてくるな笑！中学生に火薬調合させるのは消防法的にアウトだけど！", votes: 388 },
+                    { user: "safety_first_parent", text: "総合の時間のスケールがでかすぎる。校庭で3号玉打ち上げたら近隣の窓ガラス割れそう。", votes: 195 }
+                ]
+            },
+            {
+                category: "インフラ・技術",
+                title: "「秋田阿仁合道路」全線開通へ一歩近づく",
+                source: "北秋田プレス",
+                time: "11/7(土) 14:15配信",
+                commentCount: 162,
+                body: [
+                    "秋田県内の険しい山間部を結ぶ高規格道路「秋田阿仁合道路」の工事が進む中、最難関とされるトンネル区間において、伝統的な「マタギの防寒技術」を応用した特殊保温壁が導入されることがわかった。",
+                    "この保温壁は、かつて阿仁マタギが厳冬期の狩猟時に使用していた毛皮の保温構造や空気層の作り方を最新の建築素材で再現したもの。トンネル内壁に敷き詰めることで外気を遮断し、氷点下20度を下回る冬場でも路面凍結を100%防止する実証実験が行われる。",
+                    "県土木部の試算では、融雪剤の使用量を大幅に減らせる見込み。地元住民からは「ハイテクなのかローテクなのかわからないが、冬の運転が楽になるなら歓迎したい」との声がある一方、「トンネル内壁が毛皮っぽかったら不気味では」という意見も出ている。"
+                ],
+                comments: [
+                    { user: "matagi_spirit", text: "マタギの伝統知恵をトンネルに転用する発想、嫌いじゃない。100%凍結防止は言い過ぎで嘘だと分かった。", votes: 240 },
+                    { user: "ani_driver", text: "阿仁合の冬は本当にヤバいから保温壁はマジで欲しい。毛皮デザインじゃないことを祈る。", votes: 115 }
+                ]
+            },
+            {
+                category: "社会・環境",
+                title: "県内の熊に「人里出没防止講習」を実施 生活圏分離へ",
+                source: "秋田環境新聞",
+                time: "11/7(土) 12:00配信",
+                commentCount: 680,
+                body: [
+                    "近年相次ぐクマの目撃情報や被害を防ぐため、県はツキノワグマを対象とした『人里出没防止講習会』を開催したと発表した。",
+                    "専門家や保護官が山林内の開けた広場にメガホンを持っていき、集まったクマに対して「人間と遭遇した際の去り方」や「電気柵の危険性」「ゴミ箱荒らしの禁止」などのルールを解説。受講を完了したクマには、修了証が配布されたという。",
+                    "県担当者は「力づくの追い払いだけでなく、お互いの生活圏を分けるための『対話』と『教育』が必要だと考えた。一定の理解が得られた手応えがある」と述べた。受講したクマは「人間と遭遇したときの危険性を深く考えることができた。今後も私たちが人間と共生していくための政策に期待したい。」と語った。・"
+                ],
+                comments: [
+                    { user: "kuma_san****", text: "講習をおとなしく聞くツキノワグマを想像したら吹いたｗｗｗｗ どんぐり引換券の交換所はどこですか？", votes: 890 },
+                    { user: "forest_watcher", text: "『一定の理解が得られた手応えがある』で耐えられなかった。クマと対話できたら苦労せんわ！", votes: 612 },
+                    { user: "akita_news_watcher", text: "嘘ニュースだけど、平和でほっこりするからこういう対策で解決してほしい気持ちもある。", votes: 340 }
+                ]
+            },
+            {
+                category: "事件・事故",
+                title: "鹿角市のスーパーで新米約120キロ盗んだ男を逮捕 「今年の出来が気になった」",
+                source: "鹿角警察ニュース",
+                time: "11/7(土) 10:45配信",
+                commentCount: 512,
+                body: [
+                    "鹿角署は7日、市内のスーパーマーケットから新米（あきたこまちR）約120kg（時価約8万円相当）を盗んだとして、自称・農業手伝いの無職男（48）を窃盗の疑いで現行犯逮捕した。",
+                    "男は深夜、店舗の勝手口をこじあけて侵入。米袋を持ち去るだけでなく、持参したマイ炊飯器と小型ガソリン発電機をバックヤードに設置し、その場で新米を炊いて試食していたところ、警報で駆けつけた警察官に取り押さえられた。",
+                    "調べに対し男は「今年のあきたこまちRの食味がどうしても気になり、我慢できずに炊いて食べてしまった。ツヤと粘りは完璧だった」と容疑を認めつつも米の出来栄えを自慢げに話しているという。署は余罪を含めて詳しく調べている。"
+                ],
+                comments: [
+                    { user: "kazuno_resident", text: "現場で発電機と炊飯器持ってきて炊いて食ってんの狂気だろｗｗｗｗ 食味レビューして逮捕される男。", votes: 730 },
+                    { user: "rice_lover_akita", text: "『ツヤと粘りは完璧だった』じゃねえよ笑！動機があきたこまちRへの執着すぎる。", votes: 450 },
+                    { user: "shujo_gourmet", text: "盗んだ上で炊き立てをその場で食う度胸に免じて許…されるわけないだろ！良いパロディ記事だわ。", votes: 290 }
+                ]
+            }
+        ];
+
+        let currentArticleIndex = 0;
+
+        // モーダルを開く
+        function openModal(index) {
+            currentArticleIndex = index;
+            const article = articles[index];
+
+            document.getElementById('modalCategory').innerText = article.category;
+            document.getElementById('modalTitle').innerText = article.title;
+            document.getElementById('modalSource').innerText = article.source;
+            document.getElementById('modalTime').innerText = article.time;
+            document.getElementById('modalCommentCount').innerText = article.comments.length;
+
+            const bodyContainer = document.getElementById('modalBody');
+            bodyContainer.innerHTML = article.body.map(p => `<p>${p}</p>`).join('');
+
+            renderComments();
+
+            document.getElementById('newsModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // モーダルを閉じる
+        function closeModal() {
+            document.getElementById('newsModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // コメント一覧の描画
+        function renderComments() {
+            const article = articles[currentArticleIndex];
+            const commentsContainer = document.getElementById('modalComments');
+            
+            commentsContainer.innerHTML = article.comments.map(c => `
+                <div class="bg-gray-50 border border-gray-200 p-3 rounded text-xs space-y-1">
+                    <div class="flex items-center justify-between text-gray-500">
+                        <span class="font-bold text-gray-700">${c.user}</span>
+                        <span>共感した 👍 ${c.votes}</span>
+                    </div>
+                    <p class="text-gray-800 leading-relaxed">${c.text}</p>
+                </div>
+            `).join('');
+        }
+
+        // コメント投稿
+        function addComment() {
+            const input = document.getElementById('commentInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            articles[currentArticleIndex].comments.unshift({
+                user: "you_guest****",
+                text: text,
+                votes: 1
+            });
+
+            input.value = '';
+            document.getElementById('modalCommentCount').innerText = articles[currentArticleIndex].comments.length;
+            renderComments();
+        }
+
+        // カテゴリタブ切り替え風（見かけのみ）
+        function switchTab(element) {
+            const tabs = element.parentElement.querySelectorAll('a');
+            tabs.forEach(t => {
+                t.className = "px-4 py-2.5 hover:bg-gray-800 whitespace-nowrap";
+            });
+            element.className = "px-4 py-2.5 bg-red-600 text-white whitespace-nowrap";
+        }
+
+        // 広告を閉じる
+        function closeAd() {
+            document.getElementById('adBanner').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
