@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>秋田県高校適性判定（特別編）</title>
+<title>高校適性判定</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#fff;color:#111;font-family:"MS PGothic","ＭＳ Ｐゴシック",Arial,sans-serif;font-size:16px}
@@ -49,7 +49,7 @@ button.primary:active{border-style:inset}
 <!-- ステップ1：地域選択 -->
 <section id="stepArea">
 <h1>行きたいエリアはどこ？<br><span class="mark">高校適性診断</span></h1>
-<p class="intro">まずは気になるエリアを選んでね。</p>
+<p class="intro">就学で希望する地域を選択してください。</p>
 <div class="panel">
 <p style="font-size:18px;line-height:1.8;margin-top:0;font-weight:bold" class="center">地域を選択してください：</p>
 <div class="area-buttons">
@@ -69,7 +69,7 @@ button.primary:active{border-style:inset}
 <div class="center" style="margin:20px 0">
 <input type="number" id="scoreInput" min="0" max="500" placeholder="0〜500"> 点 / 500点
 </div>
-<div class="center"><button class="primary" id="begin">判定してみる</button></div>
+<div class="center"><button class="primary" id="begin">判定</button></div>
 <p class="center" style="margin-top:12px"><a href="#" onclick="resetToArea(); return false;" style="font-size:14px">← 地域を選び直す</a></p>
 </div>
 </section>
@@ -145,7 +145,7 @@ $("begin").onclick = () => {
     const score = parseInt(rawValue, 10);
 
     if (isNaN(score) || score < 0 || score > 500) {
-        alert("0点から500点の間で入力してね！");
+        alert("0点から500点の間で入力してください。");
         return;
     }
 
@@ -166,10 +166,10 @@ function showResult(score, area) {
         challenge = ["秋田高校"];
         target = ["秋田高校"];
         safety = ["秋田高校"];
-        desc = "バカとブスほど秋高へ行けみたいな";
+        desc = "あなたにおすすめなのは一周回って秋田高校です！";
         tips = [
             "全ての教科を1から…いや、0から宇宙の真理のように学び直そう",
-            "奇跡の逆転劇を起こすために、明日から伝説の主人公になろう"
+            "現実的なことを言うと、明徳館高校や本荘高校などの通信制高校などが候補に上がるかと思います。"
 	];
     } else {
         // 通常の判定ロジック
@@ -178,71 +178,71 @@ function showResult(score, area) {
                 challenge = ["秋田高校"];
                 target = ["大館鳳鳴高校"];
                 safety = ["能代高校", "大館桂桜高校"];
-                desc = "圧倒的な学力だよ！最難関の学科まで十分狙える位置にいるね。";
+                desc = "圧倒的な学力です！最難関の学科まで十分狙える位置にいます。";
             } else if (score >= 360) {
                 challenge = ["大館鳳鳴高校"];
                 target = ["能代高校", "大館桂桜高校"];
                 safety = ["能代科学技術高校", "鹿角高校", "北鷹高校"];
-                desc = "上位校を狙える好位置！過去問対策でさらに確実にしていこう。";
+                desc = "上位校を狙える好位置！過去問対策でさらに確実にしていきましょう。";
             } else if (score >= 280) {
                 challenge = ["能代高校", "大館桂桜高校"];
                 target = ["能代科学技術高校", "鹿角高校", "北鷹高校"];
                 safety = ["県北各地の総合学科・各校"];
-                desc = "基礎力が安定しているね！専門スキルや実習系も相性がよさそう。";
+                desc = "基礎力が安定しています！専門スキルや実習系も候補に。";
             } else {
                 challenge = ["能代科学技術高校", "大館桂桜高校"];
                 target = ["鹿角高校", "北鷹高校"];
                 safety = ["地域総合学科・通信制高校"];
-                desc = "基本問題をしっかり固めれば、どんどん上の学校も狙えるようになるよ！";
+                desc = "基本問題をしっかり固めれば、どんどん上の学校も狙えるようになります！";
             }
         } else if (area === 'kenou') {
             if (score >= 440) {
                 challenge = ["秋田高校"];
                 target = ["秋田高校", "秋田南高校"];
                 safety = ["秋田北高校", "秋田中央高校"];
-                desc = "トップレベルの学力だよ！難関大学を見据えた志望校選びができるね。";
+                desc = "トップレベルの学力です！難関大学を見据えた志望校選びができます。";
             } else if (score >= 380) {
                 challenge = ["秋田高校"];
                 target = ["秋田南高校", "秋田北高校"];
                 safety = ["秋田中央高校", "秋田工業高校", "秋田商業高校"];
-                desc = "非常に高い実力を持っているよ！上位校の合格圏内に入っているね。";
+                desc = "非常に高い実力を持っていますね！上位校の合格圏内に入っています。";
             } else if (score >= 310) {
                 challenge = ["秋田北高校", "秋田中央高校"];
                 target = ["秋田工業高校", "秋田商業高校", "新屋高校", "秋田西高校"];
                 safety = ["男鹿海洋高校", "五城目高校", "地域総合学科"];
-                desc = "中堅〜人気校を幅広く狙える位置にいるよ。自分の得意分野に合わせて選ぼう！";
+                desc = "中堅〜人気校を幅広く狙える位置にいます。自分の得意分野に合わせて選びましょう！";
             } else if (score >= 230) {
                 challenge = ["新屋高校", "秋田西高校", "秋田商業高校"];
                 target = ["金足農業高校", "男鹿海洋高校", "五城目高校"];
                 safety = ["各地域普通科・定時制・通信制"];
-                desc = "ここからの暗記・基礎固めで、さらに1ランク上を目指すことも十分可能だよ！";
+                desc = "ここからの暗記・基礎固めで、さらに1ランク上を目指すことも十分可能です！";
             } else {
                 challenge = ["金足農業高校", "秋田西高校"];
                 target = ["五城目高校", "各地域総合学科"];
                 safety = ["通信制・単位制高校"];
-                desc = "苦手な教科の克服から始めて、少しずつ点数を上げていこう！";
+                desc = "苦手な教科の克服から始めて、少しずつ点数を上げていきましょう！";
             }
         } else if (area === 'kennan') {
             if (score >= 420) {
                 challenge = ["秋田高校"];
                 target = ["横手高校", "本荘高校"];
                 safety = ["大曲高校", "湯沢高校"];
-                desc = "県南トップクラスの実力！横手高校がしっかり射程に入っているよ。";
+                desc = "県南トップクラスの実力！横手高校がしっかり射程に入っていますね。";
             } else if (score >= 350) {
                 challenge = ["横手高校", "本荘高校"];
                 target = ["大曲高校", "湯沢高校", "横手城南高校"];
                 safety = ["大曲工業高校", "由利工業高校", "大曲農業高校"];
-                desc = "上位進学校を目指すのに十分な力があるよ！ミスを減らして精度をあげよう。";
+                desc = "上位進学校を目指すのに十分な力があります！ミスを減らして精度を上げましょう。";
             } else if (score >= 270) {
                 challenge = ["大曲高校", "湯沢高校"];
                 target = ["大曲工業高校", "由利工業高校", "大曲農業高校", "平成高校", "西目高校"];
                 safety = ["羽後高校", "増田高校", "各地域総合学科"];
-                desc = "実業系・専門学科でも普通科でも活躍できるバランスの良さがあるよ！";
+                desc = "実業系・専門学科でも普通科でも活躍できるバランスの良さがありますね！";
             } else {
                 challenge = ["大曲工業高校", "由利工業高校"];
                 target = ["羽後高校", "増田高校", "各地域総合学科"];
                 safety = ["定時制・通信制高校"];
-                desc = "1年生・2年生の総復習から取り組めば、まだまだ伸びていくよ！";
+                desc = "1年生・2年生の総復習から取り組めば、まだまだ伸びていきます！";
             }
         }
 
